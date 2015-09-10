@@ -1,0 +1,26 @@
+MPI_HOME = /opt/mpi/bullxmpi/1.1.11.1
+EXTRAE_HOME = /gpfs/apps/NVIDIA/CEPBATOOLS/extrae/2.2.1/64
+PAPI_HOME = /gpfs/apps/NVIDIA/PAPI/4.1.3/64
+XML2_LDFLAGS = -L/usr/lib64
+XML2_LIBS = -lxml2
+UNWIND_HOME = /gpfs/apps/NVIDIA/LIBUNWIND/1.0.1
+
+CPP = $(MPI_HOME)/bin/mpic++
+CFLAGS = -O2 -g -openmp
+#CLIBS = $(EXTRAE_HOME)/lib/libmpitrace.a -L$(PAPI_HOME)/lib -lpapi $(XML2_LDFLAGS) $(XML2_LIBS)  -L/usr/lib64 -lbfd -L/usr/lib64 -liberty -L$(UNWIND_HOME)/lib -lunwind /lib64/librt.so.1
+#CLIBS = $(EXTRAE_HOME)/lib/libmpitrace.a $(PAPI_HOME)/lib/libpapi.a $(XML2_LDFLAGS) $(XML2_LIBS)  -L/usr/lib64 -lbfd -L/usr/lib64 -liberty -L$(UNWIND_HOME)/lib -lunwind /lib64/librt.so.1
+CLIBS = $(EXTRAE_HOME)/lib/libompitrace.a $(PAPI_HOME)/lib/libpapi.a $(XML2_LDFLAGS) $(XML2_LIBS)  -L/usr/lib64 -lbfd -L/usr/lib64 -liberty $(UNWIND_HOME)/lib/libunwind.a /lib64/librt.so.1
+
+all: simchol_trace_static
+
+simchol_trace_static.o: simchol_trace_static.cpp
+	$(CPP) $(CFLAGS) -c -o simchol_trace_static.o simchol_trace_static.cpp
+
+simchol_trace_static: simchol_trace_static.o
+	$(CPP) $(CFLAGS) -o simchol_trace_static simchol_trace_static.o $(CLIBS) 
+
+
+clean:
+	rm -f simchol_trace_static *.o
+
+

@@ -1,0 +1,6 @@
+octave:1> a=load('muestras-nscore.out_deletedRows_octave');
+octave:2> x=a(:,4);
+octave:3> mean(x)
+ans =  1.0560
+octave:4> std(x)
+ans =  0.64926
